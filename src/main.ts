@@ -1,11 +1,13 @@
 import express from "express";
 import http from "http";
+import path from "path";
 
 const app = express();
 const server = http.createServer(app);
 
 app.get("/", (req, res) => {
-    res.send("<h1>Hello world</h1>");
+    console.log("path.resolve():", path.resolve());
+    res.sendFile(path.join(path.resolve(), "public", "index.html"));
 });
 
 server.listen(3000, () => {
