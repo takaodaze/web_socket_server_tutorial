@@ -72,6 +72,10 @@
         const form = document.getElementById("form");
         const input = document.getElementById("input");
 
+        const event = {
+            chatMessage: "chat-message",
+        };
+
         const addMessage = (msg, from) => {
             const item = document.createElement("li");
             item.textContent = `${from}: ${msg}`;
@@ -82,12 +86,12 @@
         form.addEventListener("submit", function (e) {
             e.preventDefault();
             if (input.value) {
-                socket.emit("chat message", input.value);
+                socket.emit(event.chatMessage, input.value);
                 input.value = "";
             }
         });
 
-        socket.on("chat message", function (message) {
+        socket.on(event.chatMessage, function (message) {
             addMessage(message.msg, message.from);
         });
 

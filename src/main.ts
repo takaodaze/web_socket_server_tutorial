@@ -7,6 +7,8 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+let userIdx = 1;
+
 type Message = { msg: string; from: string };
 const createMesasge = (msg: string, from: string): Message => ({
     msg,
@@ -23,12 +25,13 @@ app.get("/", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-    socket.broadcast.emit(event.hi, createMesasge("hi", socket.id));
+    const username = `user_${userIdx++}`;
+    socket.broadcast.emit(event.hi, createMesasge("hi", username));
     socket.on(event.chatMessage, (msg) => {
-        io.emit(event.chatMessage, createMesasge(msg, socket.id));
+        io.emit(event.chatMessage, createMesasge(msg, username));
     });
     socket.on("disconnect", () => {
-        io.emit(event.chatMessage, createMesasge("bye", socket.id));
+        io.emit(event.chatMessage, createMesasge("bye", username));
     });
 });
 
