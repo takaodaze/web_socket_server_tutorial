@@ -17,6 +17,7 @@ const createMesasge = (msg: string, from: string): Message => ({
 
 const event = {
     chatMessage: "chat-message",
+    whoami: "whoami",
     hi: "hi",
 };
 
@@ -26,7 +27,10 @@ app.get("/", (req, res) => {
 
 io.on("connection", (socket) => {
     const username = `user_${userIdx++}`;
-    socket.broadcast.emit(event.hi, createMesasge("hi", username));
+
+    io.emit(event.hi, createMesasge("hi", username));
+    socket.emit(event.whoami, username);
+
     socket.on(event.chatMessage, (msg) => {
         io.emit(event.chatMessage, createMesasge(msg, username));
     });

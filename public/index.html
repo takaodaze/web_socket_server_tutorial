@@ -28,6 +28,7 @@
                 flex-grow: 1;
                 border-radius: 2rem;
                 margin: 0.25rem;
+                height: 100%;
             }
             #input:focus {
                 outline: none;
@@ -40,6 +41,7 @@
                 border-radius: 3px;
                 outline: none;
                 color: #fff;
+                height: 100%;
             }
 
             #messages {
@@ -53,11 +55,29 @@
             #messages > li:nth-child(odd) {
                 background: #efefef;
             }
+
+            #form {
+                display: flex;
+                align-items: center;
+            }
+
+            #username {
+                display: flex;
+                background-color: #bbb;
+                border-radius: 4px;
+                padding: 0.25rem;
+                margin: 0.25rem;
+                gap: 4px;
+            }
         </style>
     </head>
     <body>
         <ul id="messages"></ul>
         <form id="form" action="">
+            <div id="username">
+                <div id="username-label">user name:</div>
+                <div id="username-value"></div>
+            </div>
             <input id="input" autocomplete="off" /><button>Send</button>
         </form>
     </body>
@@ -74,6 +94,8 @@
 
         const event = {
             chatMessage: "chat-message",
+            whoami: "whoami",
+            hi: "hi",
         };
 
         const addMessage = (msg, from) => {
@@ -95,7 +117,11 @@
             addMessage(message.msg, message.from);
         });
 
-        socket.on("hi", function (message) {
+        socket.on(event.whoami, function (username) {
+            const usernameValue = document.getElementById("username-value");
+            usernameValue.textContent += username;
+        });
+        socket.on(event.hi, function (message) {
             addMessage(message.msg, message.from);
         });
     </script>
