@@ -19,11 +19,11 @@ app.get("/", (req, res) => {
 
 io.on("connection", (socket) => {
     socket.broadcast.emit("hi", createMesasge("hi", socket.id));
-    socket.on("chat message", (msg) => {
-        io.emit("chat message", createMesasge(msg, socket.id));
+    socket.on("chat-message", (msg) => {
+        io.emit("chat-message", createMesasge(msg, socket.id));
     });
     socket.on("disconnect", () => {
-        console.log("user disconnected");
+        io.emit("chat message", createMesasge("bye", socket.id));
     });
 });
 
