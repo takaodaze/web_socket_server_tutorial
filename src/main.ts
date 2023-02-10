@@ -19,6 +19,10 @@ const event = {
     chatMessage: "chat-message",
     whoami: "whoami",
     hi: "hi",
+    typingStart: "typing-start",
+    typingEnd: "typing-end",
+    someoneTypingStart: "someone-typing-start",
+    someoneTypingEnd: "someone-typing-end",
 };
 
 app.get("/", (req, res) => {
@@ -37,6 +41,10 @@ io.on("connection", (socket) => {
 
     socket.on(event.chatMessage, (msg) => {
         io.emit(event.chatMessage, createMesasge(msg, username));
+    });
+
+    socket.on(event.typingStart, (username) => {
+        socket.broadcast.emit(event.someoneTypingStart, username);
     });
     socket.on("disconnect", () => {
         io.emit(event.chatMessage, createMesasge("bye", username));

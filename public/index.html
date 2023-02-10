@@ -5,6 +5,9 @@
         <link rel="stylesheet" href="style" />
     </head>
     <body>
+        <div id="typing-status">
+            <ul id="typing-list"></ul>
+        </div>
         <ul id="messages"></ul>
         <form id="form" action="">
             <div id="username">
@@ -21,14 +24,21 @@
         }
         const socket = io();
 
+        const typingStatusDiv = document.getElementById("typing-status");
+        const typingList = document.getElementById("typing-list");
         const messages = document.getElementById("messages");
         const form = document.getElementById("form");
         const input = document.getElementById("input");
+        const usernameValueDiv = document.getElementById("username-value");
 
         const event = {
             chatMessage: "chat-message",
             whoami: "whoami",
             hi: "hi",
+            typingStart: "typing-start",
+            typingEnd: "typing-end",
+            someoneTypingStart: "someone-typing-start",
+            someoneTypingEnd: "someone-typing-end",
         };
 
         const addMessage = (msg, from) => {
@@ -46,16 +56,34 @@
             }
         });
 
+        input.addEventListener("keydown", function (e) {
+            const username = usernameValueDiv.textContent;
+            socket.emit(event.typingStart, username);
+        });
+
         socket.on(event.chatMessage, function (message) {
             addMessage(message.msg, message.from);
         });
 
         socket.on(event.whoami, function (username) {
-            const usernameValue = document.getElementById("username-value");
-            usernameValue.textContent += username;
+            usernameValueDiv.textContent = username;
         });
         socket.on(event.hi, function (message) {
             addMessage(message.msg, message.from);
         });
+
+        socket.on(event.someoneTypingStart, function (username) {
+            typingStatusDiv.style.visibility = "visible";
+            const oldTypingUserItem = document.getElementById(username);
+            oldTypingUserItem?.remove();
+
+            const statusMsg = `${username} is typing`;
+            const typingUserItem = document.createElement("li");
+            typingUserItem.textContent = `${username} is typing...`;
+            typingUserItem.id = username;
+            typingList.append(typingUserItem);
+        });
+
+        socket.on(event.someoneTypingEnd);
     </script>
 </html>

@@ -64,3 +64,18 @@ body {
     margin: 0.25rem;
     gap: 4px;
 }
+
+#typing-status {
+    position: absolute;
+    background: #bbb;
+    margin: 0.5rem;
+    right: 0;
+    top: 0;
+    visibility: hidden;
+}
+
+#typing-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0.25rem 0.5rem;
+}
