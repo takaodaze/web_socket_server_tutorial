@@ -25,6 +25,10 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(path.resolve(), "public", "index.html"));
 });
 
+app.get("/style", (req, res) => {
+    res.sendFile(path.join(path.resolve(), "public", "style.css"));
+});
+
 io.on("connection", (socket) => {
     const username = `user_${userIdx++}`;
 
